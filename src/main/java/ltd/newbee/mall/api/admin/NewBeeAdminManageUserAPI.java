@@ -50,6 +50,7 @@ public class NewBeeAdminManageUserAPI {
 
     @RequestMapping(value = "/adminUser/login", method = RequestMethod.POST)
     public Result<String> login(@RequestBody @Valid AdminLoginParam adminLoginParam) {
+        logger.info("adminUser login: " + adminLoginParam.toString());
         String loginResult = adminUserService.login(adminLoginParam.getUserName(), adminLoginParam.getPasswordMd5());
         logger.info("manage login api,adminName={},loginResult={}", adminLoginParam.getUserName(), loginResult);
 
@@ -57,9 +58,11 @@ public class NewBeeAdminManageUserAPI {
         if (StringUtils.hasText(loginResult) && loginResult.length() == Constants.TOKEN_LENGTH) {
             Result result = ResultGenerator.genSuccessResult();
             result.setData(loginResult);
+            logger.info("login succeed");
             return result;
         }
         //登录失败
+        logger.info("login failed");
         return ResultGenerator.genFailResult(loginResult);
     }
 
